@@ -1,6 +1,5 @@
 import type { RouteLocationRaw } from 'vue-router';
-import type { AwesomeLayoutPageNavbarMenu } from './types';
-
+import type { AwesomeLayoutPageNavbarMenu } from './utils/types';
 import type { NuxtApp } from '#app';
 
 export interface NuxtAwesomeAppConfig {
