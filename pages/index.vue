@@ -1,10 +1,22 @@
 <script lang="ts" setup>
 import { CalendarHeatmap } from 'vue3-calendar-heatmap';
 import 'vue3-calendar-heatmap/dist/style.css';
+import dayjs from 'dayjs';
 
 const rangeColor = ['#1F1F22', '#663300', '#cc9900', '#ffcc00', '#FFF264'];
 
-function handleUpdate() {}
+const calendar = ref<any>([]);
+const { data: initData } = await useFetch<any>('/api/calendar');
+calendar.value = initData.value;
+async function handleUpdate() {
+  const { data } = await useFetch<any>('/api/calendar/update', {
+    method: 'POST',
+  });
+  const index = calendar.value.find((item: any) => item.id === data.value.id);
+  index ? index.count = data.value.count : calendar.value.push(data.value);
+  // eslint-disable-next-line no-alert
+  alert('成功+1');
+}
 </script>
 
 <template>
@@ -13,8 +25,8 @@ function handleUpdate() {}
       <IconLogo class="w-28" />
       <div class="max-w-screen-xl w-full">
         <CalendarHeatmap
-          :values="[{ date: '2014-2-6', count: 2 }, { date: '2014-8-9', count: 5 }]"
-          end-date="2014-12-31"
+          :values="calendar.map((item: any) => ({ date: item.date, count: item.count }))"
+          :end-date="dayjs().format('YYYY-MM-DD')"
           :max="10"
           :range-color="rangeColor"
         />
@@ -24,7 +36,7 @@ function handleUpdate() {}
         class="absolute right-0 top-0 bg-[#FFF264] rounded-full w-8 h-8 text-[#E63939] font-bold text-lg"
         @click="handleUpdate"
       >
-        +
+        +1
       </button>
     </div>
   </div>
