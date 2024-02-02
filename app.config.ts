@@ -66,8 +66,8 @@ export interface NuxtAwesomeAppConfig {
   disableInfoReplaceIndexInWelcomePage?: boolean;
 }
 
-declare module '@nuxt/schema' {
-  interface AppConfigInput {
+declare module 'nuxt/schema' {
+  interface AppConfig {
     awesome?: NuxtAwesomeAppConfig;
   }
 }
