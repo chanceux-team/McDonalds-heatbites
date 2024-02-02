@@ -5,9 +5,9 @@ import dayjs from 'dayjs';
 const prisma = new PrismaClient();
 
 const calendarData: Prisma.CalendarCreateInput[] = [];
-for (let i = 0; i < 365; i++) {
+for (let i = 0; i < 366; i++) {
   calendarData.push({
-    date: dayjs().add(i, 'day').format('YYYY-MM-DD'),
+    date: dayjs(dayjs().subtract(1, 'year')).add(i, 'day').format('YYYY-MM-DD'),
   });
 }
 

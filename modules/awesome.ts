@@ -3,7 +3,7 @@ import {
   defineNuxtModule,
   createResolver,
   addImportsDir,
-} from '@nuxt/kit';
+} from 'nuxt/kit';
 import resolveConfig from 'tailwindcss/resolveConfig';
 import type { Config as TailwindConfig } from 'tailwindcss';
 
