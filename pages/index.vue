@@ -1,40 +1,31 @@
 <script lang="ts" setup>
-const { awesome } = useAppConfig();
-definePageMeta({ layout: 'page' });
-useHead({
-  titleTemplate: '',
-  title: awesome?.name || 'Nuxt 3 Awesome Starter',
-});
+import { CalendarHeatmap } from 'vue3-calendar-heatmap';
+import 'vue3-calendar-heatmap/dist/style.css';
 
-const calendar = ref<any>([]);
-const { data: initData } = await useFetch<any>('/api/calendar');
-calendar.value = initData.value;
+const rangeColor = ['#1F1F22', '#663300', '#cc9900', '#ffcc00', '#FFF264'];
 
-async function submit() {
-  const { data } = await useFetch<any>('/api/calendar/update', {
-    method: 'POST',
-  });
-  const index = calendar.value.find((item: any) => item.id === data.value.id);
-  if (index) {
-    index.count = data.value.count;
-  } else {
-    calendar.value.push(data.value);
-  }
-  // eslint-disable-next-line no-alert
-  alert(data.value.count);
-}
+function handleUpdate() {}
 </script>
 
 <template>
-  <div class="w-full flex flex-col p-6 bg-black">
-    <div>
-      <div v-for="item in calendar" :key="item.id">
-        {{ item.date }} - {{ item.count }}
+  <div class="p-6">
+    <div class="flex flex-col justify-center items-center gap-6 bg-gray-950 relative">
+      <IconLogo class="w-28" />
+      <div class="max-w-screen-xl w-full">
+        <CalendarHeatmap
+          :values="[{ date: '2014-2-6', count: 2 }, { date: '2014-8-9', count: 5 }]"
+          end-date="2014-12-31"
+          :max="10"
+          :range-color="rangeColor"
+        />
       </div>
+
+      <button
+        class="absolute right-0 top-0 bg-[#FFF264] rounded-full w-8 h-8 text-[#E63939] font-bold text-lg"
+        @click="handleUpdate"
+      >
+        +
+      </button>
     </div>
-    <button class="bg-white text-black" type="submit" @click="submit">
-      +1
-    </button>
   </div>
-  <!-- <AwesomeWelcome :with-alert="true" /> -->
 </template>

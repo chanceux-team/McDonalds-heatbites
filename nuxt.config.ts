@@ -57,6 +57,11 @@ export default defineNuxtConfig({
       path: resolve('./components/awesome'),
       global: true,
     },
+    {
+      prefix: 'Icon',
+      path: resolve('./components/icon'),
+      global: true,
+    },
   ],
 
   imports: {
