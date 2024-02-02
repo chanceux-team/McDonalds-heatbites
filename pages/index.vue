@@ -3,7 +3,7 @@ import { CalendarHeatmap } from 'vue3-calendar-heatmap';
 import 'vue3-calendar-heatmap/dist/style.css';
 import dayjs from 'dayjs';
 
-const rangeColor = ['#1F1F22', '#663300', '#cc9900', '#ffcc00', '#FFF264'];
+const rangeColor = ['#1F1F22', '#1F1F22', '#cc9900', '#ffcc00', '#FFF264'];
 
 const calendar = ref<any>([]);
 const { data: initData } = await useFetch<any>('/api/calendar');
