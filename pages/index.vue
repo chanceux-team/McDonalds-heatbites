@@ -1,7 +1,8 @@
 <script lang="ts" setup>
-import { CalendarHeatmap } from 'vue3-calendar-heatmap';
 import 'vue3-calendar-heatmap/dist/style.css';
 import dayjs from 'dayjs';
+import * as pkg from 'vue3-calendar-heatmap';
+const { CalendarHeatmap } = pkg;
 
 const rangeColor = ['#1F1F22', '#1F1F22', '#cc9900', '#ffcc00', '#FFF264'];
 
