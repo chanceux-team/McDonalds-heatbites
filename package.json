@@ -30,7 +30,10 @@
     "pinia": "^2.1.7",
     "sass": "^1.70.0",
     "stringify": "^5.2.0",
-    "tailwindcss": "^3.4.1"
+    "tailwindcss": "^3.4.1",
+    "tippy.js": "^6.3.7",
+    "unplugin-vue-components": "^0.25.2",
+    "vue3-calendar-heatmap": "^2.0.5"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^0.35.3",
