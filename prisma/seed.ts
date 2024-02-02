@@ -1,63 +1,23 @@
 import type { Prisma } from '@prisma/client';
 import { PrismaClient } from '@prisma/client';
+import dayjs from 'dayjs';
 
 const prisma = new PrismaClient();
 
-const userData: Prisma.UserCreateInput[] = [
-  {
-    name: 'Alice',
-    email: 'alice@prisma.io',
-    posts: {
-      create: [
-        {
-          title: 'Join the Prisma Slack',
-          content: 'https://slack.prisma.io',
-          published: true,
-        },
-      ],
-    },
-  },
-  {
-    name: 'Nilu',
-    email: 'nilu@prisma.io',
-    posts: {
-      create: [
-        {
-          title: 'Follow Prisma on Twitter',
-          content: 'https://www.twitter.com/prisma',
-          published: true,
-        },
-      ],
-    },
-  },
-  {
-    name: 'Mahmoud',
-    email: 'mahmoud@prisma.io',
-    posts: {
-      create: [
-        {
-          title: 'Ask a question about Prisma on GitHub',
-          content: 'https://www.github.com/prisma/prisma/discussions',
-          published: true,
-        },
-        {
-          title: 'Prisma on YouTube',
-          content: 'https://pris.ly/youtube',
-        },
-      ],
-    },
-  },
-];
+const calendarData: Prisma.CalendarCreateInput[] = [];
+for (let i = 0; i < 365; i++) {
+  calendarData.push({
+    date: dayjs().add(i, 'day').format('YYYY-MM-DD'),
+  });
+}
 
 async function main() {
   // eslint-disable-next-line no-console
   console.log('Start seeding ...');
-  for (const u of userData) {
-    const user = await prisma.user.create({
-      data: u,
+  for (const item of calendarData) {
+    await prisma.calendar.create({
+      data: item,
     });
-      // eslint-disable-next-line no-console
-    console.log(`Created user with id: ${user.id}`);
   }
   // eslint-disable-next-line no-console
   console.log('Seeding finished.');

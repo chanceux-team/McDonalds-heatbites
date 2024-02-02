@@ -2,8 +2,8 @@
 const { awesome } = useAppConfig();
 
 useHead({
-  title: awesome.name,
-  titleTemplate: `%s - ${awesome.name}`,
+  title: awesome?.name,
+  titleTemplate: `%s - ${awesome?.name}`,
 });
 </script>
 

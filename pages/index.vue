@@ -6,41 +6,35 @@ useHead({
   title: awesome?.name || 'Nuxt 3 Awesome Starter',
 });
 
-const name = ref('');
-const email = ref('');
-const { data: users } = await useFetch<any>('/api/users');
+const calendar = ref<any>([]);
+const { data: initData } = await useFetch<any>('/api/calendar');
+calendar.value = initData.value;
 
-async function save() {
-  if (name && email) {
-    const { data: result } = await useFetch('/api/users/create', {
-      method: 'POST',
-      body: JSON.stringify({
-        name: name.value,
-        email: email.value,
-      }),
-    });
-    users.value.push(result.value);
+async function submit() {
+  const { data } = await useFetch<any>('/api/calendar/update', {
+    method: 'POST',
+  });
+  const index = calendar.value.find((item: any) => item.id === data.value.id);
+  if (index) {
+    index.count = data.value.count;
+  } else {
+    calendar.value.push(data.value);
   }
+  // eslint-disable-next-line no-alert
+  alert(data.value.count);
 }
 </script>
 
 <template>
-  <div class="flex flex-col p-6 bg-black">
+  <div class="w-full flex flex-col p-6 bg-black">
     <div>
-      <div v-for="user in users" :key="user.id">
-        {{ user.name }}
+      <div v-for="item in calendar" :key="item.id">
+        {{ item.date }} - {{ item.count }}
       </div>
     </div>
-    <form @submit.prevent="save">
-      <div class="flex flex-col gap-2 max-w-52">
-        <label>Form</label>
-        <input v-model="name" type="text" placeholder="name" />
-        <input v-model="email" type="text" placeholder="email" />
-        <button type="submit">
-          Save
-        </button>
-      </div>
-    </form>
+    <button class="bg-white text-black" type="submit" @click="submit">
+      +1
+    </button>
   </div>
-  <AwesomeWelcome :with-alert="true" />
+  <!-- <AwesomeWelcome :with-alert="true" /> -->
 </template>
