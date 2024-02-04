@@ -1,7 +1,8 @@
 <script lang="ts" setup>
-import { CalendarHeatmap } from 'vue3-calendar-heatmap';
 import 'vue3-calendar-heatmap/dist/style.css';
 import dayjs from 'dayjs';
+import * as pkg from 'vue3-calendar-heatmap';
+const { CalendarHeatmap } = pkg;
 
 const calendar = ref<any>([]);
 const { data: initData } = await useFetch<any[]>('/api/calendar');
