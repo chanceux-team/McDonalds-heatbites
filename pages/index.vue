@@ -3,11 +3,9 @@ import { CalendarHeatmap } from 'vue3-calendar-heatmap';
 import 'vue3-calendar-heatmap/dist/style.css';
 import dayjs from 'dayjs';
 
-const rangeColor = ['#1F1F22', '#1F1F22', '#cc9900', '#ffcc00', '#FFF264'];
-
 const calendar = ref<any>([]);
-const { data: initData } = await useFetch<any>('/api/calendar');
-calendar.value = initData.value;
+const { data: initData } = await useFetch<any[]>('/api/calendar');
+calendar.value = initData.value || [];
 async function handleUpdate() {
   const { data } = await useFetch<any>('/api/calendar/update', {
     method: 'POST',
@@ -27,8 +25,8 @@ async function handleUpdate() {
         <CalendarHeatmap
           :values="calendar.map((item: any) => ({ date: item.date, count: item.count }))"
           :end-date="dayjs().format('YYYY-MM-DD')"
-          :max="10"
-          :range-color="rangeColor"
+          :range-color="['#1F1F22', '#1F1F22', '#E76F51', '#E9C46A', '#FFD166', '#0275D8']"
+          tooltip-unit="counts"
         />
       </div>
 
@@ -41,3 +39,15 @@ async function handleUpdate() {
     </div>
   </div>
 </template>
+
+<style lang="scss" scoped>
+:deep(.vch__external-legend-wrapper) {
+  margin-left: -8px;
+  .vch__legend__wrapper {
+
+    rect:first-child {
+      display: none;
+    }
+  }
+}
+</style>
