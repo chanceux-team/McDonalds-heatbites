@@ -1,0 +1,47 @@
+name: Deploy
+
+on:
+  push:
+    branches: [master]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20.11.0
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8.15.1
+      - run: pnpm install
+      - run: pnpm lint
+      - run: pnpm lint:ts
+      - run: pnpm build
+      - run: tar -czvf dist.tar.gz app/.output
+      - name: Publish
+        uses: nogsantos/scp-deploy@master
+        with:
+          src: dist.tar.gz
+          host: ${{ secrets.SSH_HOST }}
+          remote: ${{ secrets.SSH_DIR }}
+          user: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+
+      - name: Run
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: 22
+          script: |
+            cd ${{ secrets.SSH_DIR }}
+            rm -rf ${{ secrets.SSH_DIR }}/app/.output
+            mkdir ${{ secrets.SSH_DIR }}/app/.output
+            tar -xzvf dist.tar.gz --strip-components=1 -C ${{ secrets.SSH_DIR }}/app
+            rm dist.tar.gz
+            pm2 restart mcd
