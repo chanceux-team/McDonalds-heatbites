@@ -8,24 +8,27 @@ export async function get() {
   return users;
 }
 
-async function getTodayOrCreate(count: number | undefined) {
-  let today = await prisma.calendar.findFirst({
+async function getDateOrCreate({ count, date }: { count?: number; date?: string }) {
+  const formattedDate = dayjs(date).format('YYYY-MM-DD');
+  let calendarEntry = await prisma.calendar.findFirst({
     where: {
-      date: dayjs().format('YYYY-MM-DD'),
+      date: formattedDate,
     },
   });
-  if (!today) {
-    today = await prisma.calendar.create({
+
+  if (!calendarEntry) {
+    calendarEntry = await prisma.calendar.create({
       data: {
-        date: dayjs().format('YYYY-MM-DD'),
+        date: formattedDate,
         count: count || 1,
       },
     });
   }
-  return today;
+
+  return calendarEntry;
 }
 
-async function updateCount({ id, count, operation }: { id?: number; count?: number; operation: 'increment' | 'decrement' }) {
+async function updateCount({ id, count, date, operation }: { id?: number; count?: number; date?: string; operation: 'increment' | 'decrement' }) {
   let result = null;
   if (id) {
     result = await prisma.calendar.update({
@@ -39,7 +42,7 @@ async function updateCount({ id, count, operation }: { id?: number; count?: numb
       },
     });
   } else {
-    const today = await getTodayOrCreate(count);
+    const updateDate = await getDateOrCreate({ count, date });
     result = await prisma.calendar.update({
       data: {
         count: {
@@ -47,7 +50,7 @@ async function updateCount({ id, count, operation }: { id?: number; count?: numb
         },
       },
       where: {
-        date: today.date,
+        date: updateDate.date,
         ...(operation === 'decrement' && { count: { gte: count } }),
       },
     });

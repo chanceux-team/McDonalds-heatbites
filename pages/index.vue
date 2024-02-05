@@ -11,10 +11,16 @@ const calendar = computed(() => {
     .map((item: any) => ({ date: item.date, count: item.count }))
     || [];
 });
+
+const currentDate = ref(dayjs());
+function handleDayClick({ date }: { date: string }) {
+  currentDate.value = dayjs(date);
+}
+
 async function handleUpdate(count = 1) {
   const { data } = await useFetch<any>('/api/calendar/update', {
     method: 'POST',
-    body: JSON.stringify({ count }),
+    body: JSON.stringify({ count, date: currentDate.value }),
   });
   const index = initData.value?.find((item: any) => item.id === data.value.id);
   index ? index.count = data.value.count : initData.value?.push(data.value);
@@ -33,12 +39,13 @@ async function handleUpdate(count = 1) {
           :end-date="dayjs().format('YYYY-MM-DD')"
           :range-color="['#1F1F22', '#1F1F22', '#E76F51', '#E9C46A', '#FFD166', '#0275D8']"
           tooltip-unit="counts"
+          @day-click="handleDayClick"
         />
       </div>
 
       <div class="flex flex-col w-full gap-4">
         <div class="py-2 border-b-2 border-gray-500">
-          {{ dayjs().format('YYYY-MM-DD') }}
+          {{ currentDate.format('YYYY-MM-DD') }}
         </div>
 
         <div class="flex gap-2 items-center justify-center">
