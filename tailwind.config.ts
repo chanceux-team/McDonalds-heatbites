@@ -11,7 +11,6 @@ export default <Partial<Config>>{
     './composables/**/*.{js,ts}',
     './plugins/**/*.{js,ts}',
     './App.{js,ts,vue}',
-    './app.{js,ts,vue}',
     './Error.{js,ts,vue}',
     './error.{js,ts,vue}',
   ],
