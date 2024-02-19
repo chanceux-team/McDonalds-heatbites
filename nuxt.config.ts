@@ -7,6 +7,7 @@ export default defineNuxtConfig({
   experimental: {
     localLayerAliases: true,
   },
+  devtools: { enabled: true },
 
   // app config
   app: {
@@ -91,6 +92,12 @@ export default defineNuxtConfig({
     highlight: {
       theme: 'github-dark',
     },
+  },
+
+  runtimeConfig: {
+    baseUrl: '',
+    botToken: '',
+    mmDomain: '',
   },
 
   // todo: feat/localization

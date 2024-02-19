@@ -33,7 +33,7 @@ async function handleUpdate(count = 1) {
   <div class="p-6">
     <div class="flex flex-col justify-center items-center gap-6 bg-gray-950 max-w-screen-xl m-auto">
       <IconLogo class="w-28" />
-      <div class="w-full">
+      <div class="w-full heatmap">
         <CalendarHeatmap
           :values="calendar"
           :end-date="dayjs().format('YYYY-MM-DD')"
