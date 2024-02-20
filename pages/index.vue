@@ -4,6 +4,10 @@ import dayjs from 'dayjs';
 import * as pkg from 'vue3-calendar-heatmap';
 const { CalendarHeatmap } = pkg;
 
+useHead({
+  title: 'Home',
+});
+
 const { data: initData } = await useFetch<any[]>('/api/calendar');
 const calendar = computed(() => {
   return initData.value
@@ -38,6 +42,7 @@ async function handleUpdate(count = 1) {
           :values="calendar"
           :end-date="dayjs().format('YYYY-MM-DD')"
           :range-color="['#1F1F22', '#1F1F22', '#E76F51', '#E9C46A', '#FFD166', '#0275D8']"
+          :max="10"
           tooltip-unit="counts"
           @day-click="handleDayClick"
         />
