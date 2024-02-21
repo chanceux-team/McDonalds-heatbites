@@ -93,13 +93,6 @@ export default defineNuxtConfig({
       theme: 'github-dark',
     },
   },
-
-  runtimeConfig: {
-    baseUrl: '',
-    botToken: '',
-    mmDomain: '',
-  },
-
   // todo: feat/localization
   // module::i18n
   // i18n: {

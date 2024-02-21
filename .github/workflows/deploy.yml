@@ -23,12 +23,12 @@ jobs:
       - run: pnpm build
       - run: tar -czvf dist.tar.gz .output
       - name: Publish
-        uses: nogsantos/scp-deploy@master
+        uses: appleboy/scp-action@v0.1.7
         with:
-          src: dist.tar.gz
+          source: dist.tar.gz
           host: ${{ secrets.SSH_HOST }}
-          remote: ${{ secrets.SSH_DIR }}
-          user: ${{ secrets.SSH_USER }}
+          target: ${{ secrets.SSH_DIR }}
+          username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
 
       - name: Run
@@ -40,8 +40,8 @@ jobs:
           port: 22
           script: |
             cd ${{ secrets.SSH_DIR }}
-            rm -rf ${{ secrets.SSH_DIR }}/.output
-            mkdir ${{ secrets.SSH_DIR }}/.output
-            tar -xzvf dist.tar.gz --strip-components=1 -C ${{ secrets.SSH_DIR }}
+            rm -rf .output
+            mkdir .output
+            tar -xzvf dist.tar.gz --strip-components=1 -C .output
             rm dist.tar.gz
-            pm2 restart mcd
+            pm2 restart ecosystem.config.cjs
