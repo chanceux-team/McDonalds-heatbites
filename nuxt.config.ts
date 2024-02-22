@@ -37,11 +37,19 @@ export default defineNuxtConfig({
     '@vueuse/nuxt',
     // contents,
     '@nuxt/content',
-
     // todo: feat/localization
     // '@nuxtjs/i18n'
   ],
 
+  nitro: {
+    devProxy: {
+      '/api': {
+        target: 'https://test.lazegull.top/api',
+        changeOrigin: true,
+        prependPath: true,
+      },
+    },
+  },
   css: [
     resolve('./assets/scss/_variables.scss'),
     resolve('./assets/scss/app.scss'),

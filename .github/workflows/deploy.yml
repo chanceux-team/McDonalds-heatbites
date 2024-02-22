@@ -40,6 +40,8 @@ jobs:
           port: 22
           script: |
             cd ${{ secrets.SSH_DIR }}
+            git pull
+            pnpm i
             rm -rf .output
             mkdir .output
             tar -xzvf dist.tar.gz --strip-components=1 -C .output

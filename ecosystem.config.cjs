@@ -1,7 +1,7 @@
 module.exports = {
   apps: [
     {
-      name: 'mcd',
+      name: 'mcd-frontend',
       port: '3000',
       exec_mode: 'cluster',
       instances: 'max',
