@@ -35,4 +35,19 @@ export default defineNuxtSchema({
       },
     } as NuxtAwesomeAppConfig,
   },
+  // modules: [
+  //   '@nuxtjs/axios',
+  //   '@nuxtjs/proxy',
+  // ],
+  // axios: {
+  //   proxy: true,
+  //   prefix: '/api',
+  //   credentials: true,
+  // },
+  // proxy: {
+  //   '/api': {
+  //     target: 'https://test.lazegull.top/api',
+  //     changeOrigin: true,
+  //   },
+  // },
 });

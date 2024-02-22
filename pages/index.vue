@@ -8,7 +8,13 @@ useHead({
   title: 'Home',
 });
 
-const { data: initData } = await useFetch<any[]>('/api/calendar');
+const initData = ref<any[]>([]);
+useFetch<any[]>('/api/calendar', {
+  server: false,
+  onResponse: ({ response }) => {
+    initData.value = response._data;
+  },
+});
 const calendar = computed(() => {
   return initData.value
     ?.filter((item: any) => item.count > 0)
@@ -22,7 +28,7 @@ function handleDayClick({ date }: { date: string }) {
 }
 
 async function handleUpdate(count = 1) {
-  const { data } = await useFetch<any>('/api/calendar/update', {
+  const { data } = await useFetch<any>('/api/calendar', {
     method: 'POST',
     body: JSON.stringify({ count, date: currentDate.value }),
   });
