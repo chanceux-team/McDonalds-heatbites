@@ -2,48 +2,47 @@ name: Deploy
 
 on:
   push:
-    branches: [master]
-
+    branches:
+      - master
   workflow_dispatch:
 
 jobs:
-  build:
+  build-and-deploy:
+    # 运行所需要的虚拟机环境
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20.11.0
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 8.15.1
-      - run: pnpm install
-      - run: pnpm lint
-      - run: pnpm lint:ts
-      - run: pnpm build
-      - run: tar -czvf dist.tar.gz .output
-      - name: Publish
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          source: dist.tar.gz
-          host: ${{ secrets.SSH_HOST }}
-          target: ${{ secrets.SSH_DIR }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_KEY }}
+      # 将代码拉取到虚拟机
+      - name: Checkout
+        uses: actions/checkout@v2
 
-      - name: Run
-        uses: appleboy/ssh-action@master
+      # 安装 Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+
+      # 安装 pnpm
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      # 安装依赖
+      - name: Install Dependencies
+        run: pnpm install
+
+      # 打包
+      - name: Build
+        run: pnpm build
+
+      # 部署
+      - name: Deploy
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
-          port: 22
           script: |
             cd ${{ secrets.SSH_DIR }}
             git pull
-            pnpm i
-            rm -rf .output
-            mkdir .output
-            tar -xzvf dist.tar.gz --strip-components=1 -C .output
-            rm dist.tar.gz
-            pm2 restart ecosystem.config.cjs
+            rm -rf /var/www/mcd/*
+            cp -r ./dist/* /var/www/mcd
+            nginx -s reload
